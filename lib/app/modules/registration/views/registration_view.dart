@@ -1,15 +1,14 @@
 import 'package:drop_down_search_field/drop_down_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iecc/app/utils/extensions.dart';
-import 'package:iecc/app/modules/registration/models/country_list_model.dart';
 import 'package:iecc/app/modules/registration/models/office_list_model.dart';
 import 'package:iecc/app/routes/app_pages.dart';
 import 'package:iecc/app/modules/customAppBar/custom_app_bar.dart';
 import 'package:iecc/common_widgets/custom_country_dropdown.dart';
 import 'package:iecc/common_widgets/custom_loading_screen.dart';
+import 'package:iecc/common_widgets/custom_office_dropdown.dart';
 import 'package:iecc/common_widgets/custom_phone_text_field.dart';
 import 'package:iecc/constraints/app_strings.dart';
 
@@ -19,6 +18,7 @@ import '../../../../constraints/app_colors.dart';
 import '../../../../constraints/body_text.dart';
 import '../../../../constraints/header_text.dart';
 import '../controllers/registration_controller.dart';
+import '../models/country_list_model.dart';
 
 class RegistrationView extends GetView<RegistrationController> {
   RegistrationView({super.key});
@@ -28,6 +28,7 @@ class RegistrationView extends GetView<RegistrationController> {
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(),
@@ -107,7 +108,7 @@ class RegistrationView extends GetView<RegistrationController> {
     );
   }
 
-  Widget phoneTextField() {
+/*  Widget phoneTextField() {
     return CustomTextField(
       isRequired: true,
       hintText: "0000 000 000",
@@ -122,7 +123,8 @@ class RegistrationView extends GetView<RegistrationController> {
           children: [
             Expanded(
               child: DropdownButtonFormField<SingleCountry>(
-                isExpanded: true,
+                isExpanded: false,
+
                 selectedItemBuilder: (_) {
                   return controller.countryList
                       .map<Widget>((SingleCountry item) {
@@ -188,160 +190,121 @@ class RegistrationView extends GetView<RegistrationController> {
         ),
       ),
     );
-  }
-
-/*  Widget officeDropdown() {
-    return DropdownButtonFormField<SingleOffice>(
-      validator: (value) {
-        return value == null ? "Select nearest office" : null;
-      },
-      isExpanded: true,
-      iconSize: 25,
-      iconEnabledColor: Colors.red,
-      iconDisabledColor: Colors.red,
-      style: TextStyle(
-          fontSize: 14.sp,
-          fontWeight: FontWeight.w400,
-          color: AppColors.bodyTextColor),
-      decoration: InputDecoration(
-        counterText: "",
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-          borderSide: const BorderSide(color: AppColors.inactiveColor),
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-          borderSide: const BorderSide(color: AppColors.inactiveColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-          borderSide: const BorderSide(color: AppColors.levelTextColor),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-          borderSide: const BorderSide(color: AppColors.primaryColor),
-        ),
-        contentPadding: EdgeInsets.only(
-            left: 24,
-            right: 15,
-            bottom: AppDimensions.widgetPaddingVer,
-            top: AppDimensions.widgetPaddingVer),
-        // hintText: hintText,
-        labelText: "Select Nearest Office",
-        floatingLabelStyle: const TextStyle(
-            color: AppColors.headerTextColor, fontWeight: FontWeight.bold),
-        //  prefixIcon: preFix,
-        //  suffixIcon: suffix,
-        hintStyle: const TextStyle(color: AppColors.levelTextColor),
-      ),
-      items: controller.officeList
-          .map<DropdownMenuItem<SingleOffice>>((SingleOffice value) {
-        return DropdownMenuItem<SingleOffice>(
-          value: value,
-          child: BodyText(
-            text: value.name.toString(),
-            maxLine: 3,
-            align: TextAlign.start,
-          ),
-        );
-      }).toList(),
-      onChanged: (SingleOffice? value) {
-        controller.selectedOffice.value=value??SingleOffice();
-      },
-    );
   }*/
 
+
+
   Widget officeDropdown() {
-    return DropDownSearchFormField<SingleOffice>(
-      suggestionsBoxController: suggestionBoxController,
-      validator: (value) {
-        if ((value ?? "").isEmpty) {
-          return "Office is required";
-        }
-        return null;
-      },
-      textFieldConfiguration: TextFieldConfiguration(
-        style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColors.bodyTextColor),
-        controller: controller.officeController,
-        decoration: InputDecoration(
-          counterText: "",
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.r),
-            borderSide: const BorderSide(color: AppColors.inactiveColor),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.r),
-            borderSide: const BorderSide(color: AppColors.inactiveColor),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.r),
-            borderSide: const BorderSide(color: AppColors.levelTextColor),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.r),
-            borderSide: const BorderSide(color: AppColors.primaryColor),
-          ),
-          contentPadding: EdgeInsets.only(
-              left: 24,
-              bottom: 16.h, // AppDimensions.widgetPaddingVer,
-              top: 16.h //AppDimensions.widgetPaddingVer
-              ),
-          hintText: "Select Nearest Office *",
-          labelText: "Select Nearest Office *",
-          floatingLabelStyle: const TextStyle(
-              color: AppColors.headerTextColor, fontWeight: FontWeight.bold),
-          suffixIcon: InkWell(
-            onTap: () {
-              if (suggestionBoxController.isOpened()) {
-                suggestionBoxController.close();
-              } else {
-                suggestionBoxController.open();
-              }
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.r),
+          color:Colors.transparent),
+      child: Column(
+        children: [
+          ValueListenableBuilder<TextEditingValue>(
+            valueListenable: controller.officeController,
+            builder: (context, value, child) {
+              // Fetch filtered suggestions based on the current text input
+              List<SingleOffice> suggestions = getSuggestions(value.text);
+
+              return DropdownMenu<SingleOffice>(
+                hintText: "Select Nearest Office *",
+                label: const Text("Select Nearest Office *"),
+                onSelected: (selectedOffice) {
+                  // Update the selected office and the text field
+                  controller.selectedOffice.value = selectedOffice!;
+                  controller.officeController.text = selectedOffice.name ?? "";
+                },
+                menuHeight: 300.h,
+                trailingIcon: const Icon(
+                  Icons.arrow_drop_down_sharp,
+                  color: AppColors.primaryColor,
+                ),
+                selectedTrailingIcon: const Icon(
+                  Icons.arrow_drop_up_sharp,
+                  color: AppColors.primaryColor,
+                ),
+                width: Get.width - (24.w * 2),
+                inputDecorationTheme: InputDecorationTheme(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.r),
+                    borderSide: const BorderSide(color: AppColors.inactiveColor),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.r),
+                    borderSide: const BorderSide(color: AppColors.inactiveColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.r),
+                    borderSide: const BorderSide(color: AppColors.levelTextColor),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.r),
+                    borderSide: const BorderSide(color: AppColors.primaryColor),
+                  ),
+                  contentPadding: EdgeInsets.only(
+                    left: 24,
+                    bottom: 16.h,
+                    top: 16.h,
+                  ),
+                  floatingLabelStyle: const TextStyle(
+                    color: AppColors.headerTextColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  hintStyle: const TextStyle(
+                    color: AppColors.levelTextColor,
+                    fontSize: 14,
+                  ),
+                  labelStyle: const TextStyle(
+                    color: AppColors.levelTextColor,
+                    fontSize: 12,
+                  ),
+                ),
+                requestFocusOnTap: true,
+                controller: controller.officeController,
+                dropdownMenuEntries: suggestions
+                    .map<DropdownMenuEntry<SingleOffice>>((SingleOffice office) {
+                  return DropdownMenuEntry<SingleOffice>(
+                    value: office,
+                    label: office.name ?? "",
+                    enabled: true,
+                    labelWidget: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.symmetric(
+                          horizontal: 24.w,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            BodyText(
+                              text: office.name ?? "",
+                              fontWeight: FontWeight.bold,
+                              align: TextAlign.start,
+                            ),
+                            BodyText(
+                              text: office.address ?? "",
+                              size: 10,
+                              align: TextAlign.start,
+                            ),
+                            const Divider(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+                textStyle: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.headerTextColor,
+                ),
+              );
             },
-            child: const Icon(
-              Icons.arrow_drop_down_outlined,
-              color: AppColors.primaryColor,
-            ),
-          ),
-          hintStyle:
-              const TextStyle(color: AppColors.levelTextColor, fontSize: 14),
-          labelStyle:
-              const TextStyle(color: AppColors.levelTextColor, fontSize: 12),
-        ),
+          )
+
+        ],
       ),
-      onSuggestionSelected: (SingleOffice value) {
-        controller.selectedOffice.value = value;
-        controller.officeController.text = value.name ?? "";
-      },
-      itemBuilder: (buildContext, value) {
-        return Padding(
-          padding: EdgeInsetsDirectional.symmetric(
-              horizontal: 24.w //AppDimensions.horizontalPadding
-              ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BodyText(
-                text: value.name ?? "",
-                fontWeight: FontWeight.bold,
-                align: TextAlign.start,
-              ),
-              BodyText(
-                text: value.address ?? "",
-                size: 10,
-                align: TextAlign.start,
-              ),
-              const Divider()
-            ],
-          ),
-        );
-      },
-      suggestionsCallback: (pattern) {
-        return getSuggestions(pattern);
-      },
     );
   }
 
@@ -351,7 +314,17 @@ class RegistrationView extends GetView<RegistrationController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          officeDropdown(),
+          CustomOfficeDropdown(
+            hintText: "Select Nearest Office",
+            labelText: "Select Nearest Office",
+            required: true,
+            officeList: controller.officeList,
+            onChange: (value) {
+              controller.selectedOffice.value = value;
+              controller.officeController.text = value.name ?? "";
+            },
+          ),
+          //officeDropdown(),
           SizedBox(height: 16.h //AppDimensions.widgetPaddingVer,
               ),
           CustomTextField(
@@ -389,6 +362,7 @@ class RegistrationView extends GetView<RegistrationController> {
           ),
           SizedBox(height: 16.h // AppDimensions.widgetPaddingVer,
               ),
+
           CustomPhoneTextField(
             callingCode:
                 controller.selectedPhoneCountry.value.callingCode ?? "",
@@ -399,8 +373,6 @@ class RegistrationView extends GetView<RegistrationController> {
               controller.phoneCountryController.text = value.iso31662 ?? "";
             },
             controller: controller.phoneController,
-            countryController: controller.phoneCountryController,
-            phoneSuggestionController: SuggestionsBoxController(),
           ),
           //  phoneTextField(),
           SizedBox(height: 16.h // AppDimensions.widgetPaddingVer,
@@ -408,14 +380,12 @@ class RegistrationView extends GetView<RegistrationController> {
           CustomCountryDropdown(
             labelText: "Present Country",
             hintText: "Present Country",
-            controller: controller.countryController,
             required: true,
             countryList: controller.countryList,
             onChange: (value) {
               controller.selectedCountry.value = value;
               controller.countryController.text = value.name ?? "";
             },
-            countrySuggestionBoxController: SuggestionsBoxController(),
           ),
           /*CustomTextField(
             isRequired: true,

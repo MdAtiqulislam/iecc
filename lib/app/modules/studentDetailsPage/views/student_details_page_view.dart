@@ -46,8 +46,17 @@ class StudentDetailsPageView extends GetView<StudentDetailsPageController> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: 8.h,),
+                      BackButton(
+                        color: AppColors.iconColor,
+                        style: ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(Colors.white),
+                            elevation: WidgetStatePropertyAll(3),
+                            shadowColor: WidgetStatePropertyAll(Colors.black87)
+                        ),
+                      ),
                       SizedBox(
-                        height:32.h// AppDimensions.sectionPaddingVer,
+                        height:16.h// AppDimensions.sectionPaddingVer,
                       ),
                       headerSection(),
                       SizedBox(

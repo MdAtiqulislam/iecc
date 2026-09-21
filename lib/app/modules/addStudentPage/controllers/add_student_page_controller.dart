@@ -16,7 +16,7 @@ class AddStudentPageController extends GetxController {
   final isUpdating = false.obs;
 
   final genderList = ["Male", "Female"];
-  final selectedGender = "Male".obs;
+  final selectedGender = "".obs;
   final selectedCountry = SingleCountry().obs;
   final selectedPhoneCountry = SingleCountry().obs;
   final countryList = <SingleCountry>[].obs;
@@ -60,9 +60,9 @@ class AddStudentPageController extends GetxController {
       if (value != null) {
         countryList.value = value;
         isLoading.value = false;
-        selectedCountry.value = countryList[0];
-        selectedPhoneCountry.value = countryList[0];
-        countryCodeController.text=selectedPhoneCountry.value.iso31662??"";
+        //selectedCountry.value = countryList[0];
+        //selectedPhoneCountry.value = countryList[0];
+        //countryCodeController.text=selectedPhoneCountry.value.iso31662??"";
        // countryNameController.text=selectedCountry.value.name??"";
        // coun.text=selectedPhoneCountry.value.name??"";
       } else {
@@ -112,7 +112,7 @@ class AddStudentPageController extends GetxController {
       "given_name": firstNameController.text,
       "family_name": lastNameController.text,
       "email": emailController.text,
-      "gender": selectedGender.value,
+      "gender": selectedGender.value.isEmpty?"":selectedGender.value,
       "nationalities_id": selectedCountry.value.id.toString(),
       "mobile_country_id": selectedPhoneCountry.value.id.toString(),
       "notes": notesController.text
@@ -136,7 +136,7 @@ class AddStudentPageController extends GetxController {
       firstNameController.text = lead.value.givenName ?? "";
       lastNameController.text = lead.value.familyName ?? "";
       emailController.text = lead.value.email ?? "";
-      selectedGender.value = lead.value.gender ?? "";
+      selectedGender.value = (lead.value.gender ?? "")=="NULL"?"":lead.value.gender ?? "";
       notesController.text = lead.value.notes ?? "";
       if (lead.value.nationalitiesId != null) {
         selectedCountry.value = countryList[countryList
@@ -170,7 +170,7 @@ class AddStudentPageController extends GetxController {
         "lead_id": lead.value.id.toString(),
         "given_name": firstNameController.text,
         "family_name": lastNameController.text,
-        "gender": selectedGender.value,
+        "gender": selectedGender.value.isEmpty?"":selectedGender.value,
         "nationalities_id": selectedCountry.value.id.toString(),
         "mobile_country_id": selectedPhoneCountry.value.id.toString(),
         "notes": notesController.text,
@@ -231,11 +231,9 @@ class AddStudentPageController extends GetxController {
     emailController.text = "";
     countryNameController.text="";
     countryCodeController.text="";
-    selectedGender.value = "Male";
-    selectedCountry.value =
-        countryList.isEmpty ? SingleCountry() : countryList[0];
-    selectedPhoneCountry.value =
-        countryList.isEmpty ? SingleCountry() : countryList[0];
+    selectedGender.value = "";
+    selectedCountry.value =SingleCountry();
+    selectedPhoneCountry.value =SingleCountry();
     notesController.text = "";
   }
 }

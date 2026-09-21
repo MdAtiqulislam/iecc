@@ -1,8 +1,9 @@
-import 'package:drop_down_search_field/drop_down_search_field.dart';
+
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:iecc/app/modules/registration/models/country_list_model.dart';
+import '../app/modules/registration/models/country_list_model.dart';
 import '../constraints/app_colors.dart';
 
 class CustomCountryDropdown extends StatelessWidget {
@@ -10,151 +11,192 @@ class CustomCountryDropdown extends StatelessWidget {
   final bool showBorder;
   final String? labelText;
   final String? hintText;
-  final TextEditingController? controller;
   final List<SingleCountry> countryList;
   final Function(SingleCountry)? onChange;
-  final  SuggestionsBoxController countrySuggestionBoxController ;
+  final SingleCountry? selectedCountry;
 
- const  CustomCountryDropdown(
-      {this.required = false,
-      this.controller,
-      required this.countryList,
-        required this.countrySuggestionBoxController,
-      this.labelText,
-      this.hintText,
-      this.showBorder = true,
-      this.onChange,
-      super.key});
-
+  const CustomCountryDropdown({
+    this.required = false,
+    required this.countryList,
+    this.labelText,
+    this.hintText,
+    this.showBorder = true,
+    this.onChange,
+    super.key,
+    this.selectedCountry
+  });
 
   @override
   Widget build(BuildContext context) {
-    return DropDownSearchFormField<SingleCountry>(
-      suggestionsBoxController: countrySuggestionBoxController,
-
-
-
-      validator: required
-          ? (value) {
-              if ((value ?? "").isEmpty) {
-                return "Country is required";
-              }
-              return null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        DropdownSearch<SingleCountry>(
+          onChanged: (value) {
+            if (onChange != null && value != null) {
+              onChange!(value);
             }
-          : null,
-      textFieldConfiguration: TextFieldConfiguration(
-        style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColors.bodyTextColor),
-        controller: controller,
-        decoration: InputDecoration(
-          counterText: "",
-          enabledBorder: showBorder
-              ? OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
-                  borderSide: const BorderSide(color: AppColors.inactiveColor),
-                )
-              : InputBorder.none,
-          border: showBorder
-              ? OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
-                  borderSide: const BorderSide(color: AppColors.inactiveColor),
-                )
-              : InputBorder.none,
-          focusedBorder: showBorder
-              ? OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
-                  borderSide: const BorderSide(color: AppColors.levelTextColor),
-                )
-              : InputBorder.none,
-          errorBorder: showBorder
-              ? OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
-                  borderSide: const BorderSide(color: AppColors.primaryColor),
-                )
-              : InputBorder.none,
-          contentPadding: EdgeInsets.only(
-              left: 24,
-              bottom: 16.h, //AppDimensions.widgetPaddingVer,
-              top: 16.h //AppDimensions.widgetPaddingVer
+          },
+          selectedItem: selectedCountry,
+
+          dropdownBuilder: (buildContext, country) {
+            final flagUrl = country?.flagUrl;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (flagUrl != null && flagUrl.isNotEmpty)
+                  SvgPicture.network(
+                    flagUrl,
+                    height: 20,
+                    width: 30,
+                    placeholderBuilder: (context) =>
+                        Icon(Icons.flag, size: 20),
+                  ),
+
+                SizedBox(width: 10.w),
+                Expanded(
+                  child: Text(
+                    country?.name ?? "",
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: AppColors.bodyTextColor,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+              ],
+            );
+          },
+
+
+          compareFn: (item1, item2) => item1.iso31662 == item2.iso31662,
+          itemAsString: (country) => country.iso31662 ?? "",
+          items: (filter, infiniteScrollProps) => countryList,
+          filterFn: (country, filter) {
+            final query = filter.toLowerCase();
+            return (country.name?.toLowerCase().contains(query) ?? false) ||
+                (country.iso31662?.toLowerCase().contains(query) ?? false);
+          },
+          decoratorProps: DropDownDecoratorProps(
+            decoration: InputDecoration(
+              errorMaxLines: 5,
+              counterText: "",
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.r),
+                borderSide:
+                const BorderSide(color: AppColors.inactiveColor),
               ),
-          hintText: hintText,
-          labelText: required ? "$labelText *" : labelText,
-          floatingLabelStyle: const TextStyle(
-              color: AppColors.headerTextColor, fontWeight: FontWeight.bold),
-          suffixIcon: InkWell(
-            onTap: (){
-             if (countrySuggestionBoxController.isOpened()){
-               countrySuggestionBoxController.close();
-             }else{
-               countrySuggestionBoxController.open();
-             }
-            },
-            child: const Icon(
-              Icons.arrow_drop_down_outlined,
-              color: AppColors.primaryColor,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.r),
+                borderSide:
+                const BorderSide(color: AppColors.inactiveColor),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.r),
+                borderSide:
+                const BorderSide(color: AppColors.levelTextColor),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.r),
+                borderSide:
+                const BorderSide(color: AppColors.primaryColor),
+              ),
+              contentPadding: EdgeInsets.only(
+                left: 24,
+                bottom: 16.h,
+                top: 16.h,
+              ),
+              hintText: hintText,
+              labelText: required ? "$labelText *" : labelText,
+              floatingLabelStyle: const TextStyle(
+                color: AppColors.headerTextColor,
+                fontWeight: FontWeight.bold,
+              ),
+              suffixIconColor: AppColors.primaryColor,
+              hintStyle: const TextStyle(
+                color: AppColors.levelTextColor,
+                fontSize: 14,
+              ),
+              labelStyle: const TextStyle(
+                color: AppColors.levelTextColor,
+                fontSize: 12,
+              ),
             ),
           ),
-          hintStyle:
-              const TextStyle(color: AppColors.levelTextColor, fontSize: 14),
-          labelStyle:
-              const TextStyle(color: AppColors.levelTextColor, fontSize: 12),
-        ),
-      ),
-      onSuggestionSelected: (SingleCountry value) {
-        if (onChange != null) {
-          onChange!(value);
-        }
-        // controller.selectedOffice.value=value;
-        // controller.officeController.text=value.name??"";
-      },
-      itemBuilder: (buildContext, value) {
-        return Padding(
-          padding: EdgeInsetsDirectional.symmetric(
-              horizontal: 24.w //AppDimensions.horizontalPadding
+          popupProps: PopupProps.menu(
+            showSearchBox: true,
+            searchFieldProps: TextFieldProps(
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 8.h, horizontal: 12.w),
+                // Adjust padding to control height
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.primaryColor),
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                hintText: "Search...",
+                hintStyle: TextStyle(
+                    fontSize: 12.sp), // Optional: Adjust font size if needed
               ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SvgPicture.network(
-                    value.flagUrl ?? "",
-                    height: 20,
-                  ),
-                  SizedBox(width: 24.w //AppDimensions.widgetPaddingHor,
+            ),
+
+            itemBuilder: (context, SingleCountry country, isSelected, _) {
+              final flagUrl = country.flagUrl;
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0, vertical: 4.0),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(width: 16.w,),
+                            if (flagUrl != null && flagUrl.isNotEmpty)
+                              SvgPicture.network(
+                                flagUrl,
+                                height: 20,
+                                width: 30,
+                                placeholderBuilder: (context) =>
+                                    Icon(Icons.flag, size: 20),
+                              ),
+                            // Fallback icon
+                            SizedBox(width: 20.w),
+                            Expanded(
+                              child: Text(
+                                country.name ?? "",
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: AppColors.bodyTextColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                  Expanded(
-                    child: Text(
-                      value.name ?? "",
-                      style: const TextStyle(color: AppColors.bodyTextColor),
-                    ),
+                      const Divider(),
+                    ],
                   ),
-                ],
-              ),
-              const Divider()
-            ],
+                ),
+              );
+            },
+
+
+            listViewProps: ListViewProps(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+            ),
           ),
-        );
-      },
-      suggestionsCallback: (pattern) {
-        return getSuggestions(pattern);
-      },
+        ),
+      ],
     );
-  }
-
-  List<SingleCountry> getSuggestions(String query) {
-    List<SingleCountry> matches = <SingleCountry>[];
-    matches.addAll(countryList);
-    matches.retainWhere((s) {
-      return ((s.name ?? "").toLowerCase()).contains(query.toLowerCase()) ||
-          ((s.iso31662 ?? "").toLowerCase()).contains(query.toLowerCase()) ||
-          ((s.iso31663 ?? "").toLowerCase()).contains(query.toLowerCase());
-    });
-
-    return matches;
   }
 }

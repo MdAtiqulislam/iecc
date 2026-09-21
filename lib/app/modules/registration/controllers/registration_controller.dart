@@ -32,12 +32,13 @@ class RegistrationController extends GetxController {
 
   var phoneCountryController=TextEditingController();
 
+
   @override
   void onInit() {
     super.onInit();
     fetchData();
-
   }
+
 
 
   @override
@@ -74,9 +75,9 @@ class RegistrationController extends GetxController {
     await RemoteServices.getCountryList().then((value){
       if(value!=null){
         countryList.value =value;
-        selectedCountry.value = countryList[0];
-        selectedPhoneCountry.value=countryList[0];
-        phoneCountryController.text=selectedPhoneCountry.value.iso31662??"";
+        //selectedCountry.value = countryList[0];
+       /// selectedPhoneCountry.value=countryList[0];
+      //  phoneCountryController.text=selectedPhoneCountry.value.iso31662??"";
 
       }
     });
@@ -135,4 +136,5 @@ class RegistrationController extends GetxController {
           }
     });
   }
+
 }

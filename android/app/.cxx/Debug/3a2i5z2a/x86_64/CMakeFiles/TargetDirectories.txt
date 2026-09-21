@@ -1,0 +1,2 @@
+/Users/revinar/AndroidStudioProjects/iecc/android/app/.cxx/Debug/3a2i5z2a/x86_64/CMakeFiles/rebuild_cache.dir
+/Users/revinar/AndroidStudioProjects/iecc/android/app/.cxx/Debug/3a2i5z2a/x86_64/CMakeFiles/edit_cache.dir

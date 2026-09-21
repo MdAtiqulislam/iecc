@@ -27,6 +27,7 @@ class HomeView extends GetView<HomeController> {
                 appBar: CustomAppBar(
                   minimal: false,
                   scaffoldKey: scaffoldKey,
+                  showBackButton: false,
                   /*openDrawer: () {
             _scaffoldKey.currentState!.openDrawer();
           },*/

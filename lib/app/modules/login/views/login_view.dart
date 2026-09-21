@@ -138,27 +138,6 @@ class LoginView extends GetView<LoginController> {
           align: TextAlign.start,
         )
 
-        /* Row(
-        children: [
-          BodyText(
-            text: AppTitlesAndKeys.noAccountButtonTextKey.tr,
-            color: AppColors.headerTextColor,
-          ),
-          SizedBox(
-            width:8.w// AppDimensions.contentPaddingHor,
-          ),
-          InkWell(
-            onTap: () {
-              Get.offAndToNamed(Routes.REGGISTRATION);
-            },
-            child: BodyText(
-              text: AppTitlesAndKeys.signUpTextKey.tr,
-              fontWeight: FontWeight.bold,
-              color: AppColors.secondaryLightColor,
-            ),
-          )
-        ],
-      ),*/
         );
   }
 

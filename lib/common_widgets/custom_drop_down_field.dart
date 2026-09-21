@@ -87,7 +87,8 @@ class CustomDropDownField extends StatelessWidget {
             fontWeight: FontWeight.bold),
         //  prefixIcon: preFix,
         //  suffixIcon: suffix,
-        hintStyle: const TextStyle(color: AppColors.levelTextColor),
+        hintStyle: const TextStyle(color: AppColors.levelTextColor,fontSize: 14),
+        labelStyle: const TextStyle(color: AppColors.levelTextColor,fontSize: 12),
       ),
       items: itemList.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(

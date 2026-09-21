@@ -77,7 +77,7 @@ class CustomTextField extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w400,
-                      color: AppColors.bodyTextColor),
+                      color: AppColors.headerTextColor),
                   enabled: isEnable,
                   obscureText: isPassword ?? false,
                   obscuringCharacter: "*",

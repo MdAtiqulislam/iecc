@@ -18,24 +18,21 @@ Future<XFile?> picImage(ImageSource imageSource) async {
 
 Future<CroppedFile?> cropImage({required String filePath}) async {
   return await ImageCropper().cropImage(
-    cropStyle: CropStyle.circle,
     sourcePath: filePath,
-    aspectRatioPresets: [
-      // CropAspectRatioPreset.square,
-      //CropAspectRatioPreset.ratio3x2,
-      CropAspectRatioPreset.original,
-      // CropAspectRatioPreset.ratio4x3,
-      //CropAspectRatioPreset.ratio16x9
-    ],
+
     uiSettings: [
       AndroidUiSettings(
-          toolbarTitle: 'Edit',
-          toolbarColor: Colors.white,
-          toolbarWidgetColor: AppColors.primaryColor,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false),
+        toolbarTitle: 'Edit',
+        toolbarColor: Colors.white,
+        toolbarWidgetColor: AppColors.primaryColor,
+        lockAspectRatio: false,
+        showCropGrid: true, // Optional: Show grid while cropping
+        cropStyle: CropStyle.circle, // Circle cropping style
+      ),
       IOSUiSettings(
         title: 'Edit',
+        aspectRatioLockEnabled: false, // Unlock aspect ratio
+        cropStyle: CropStyle.circle, // Circle cropping style
       ),
     ],
   );

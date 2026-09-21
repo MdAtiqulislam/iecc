@@ -38,6 +38,7 @@ class RemoteServices {
         var r = json.decode(response.body);
         if (kDebugMode) {
           print(response.body);
+          print(response.statusCode);
         }
 
         if (r["status"] ?? false) {

@@ -32,11 +32,6 @@ class AddStudentPageView extends GetView<AddStudentPageController> {
           scaffoldKey: scaffoldKey,
         ),
         drawer: MyDrawer(),
-        /*bottomNavigationBar: controller.isUpdating.value
-            ? null
-            : CustomBottomNavBar(
-                disable: !controller.isLoading.value,
-              ),*/
         body: Obx(
           () => Stack(
             children: [
@@ -47,51 +42,57 @@ class AddStudentPageView extends GetView<AddStudentPageController> {
                       horizontal: 24.w,//AppDimensions.horizontalPadding,
                       vertical: 8.h//AppDimensions.contentPaddingVer
                   ),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 24.w,//AppDimensions.horizontalPadding,
-                        vertical: 24.h//AppDimensions.verticalPadding
-                    ),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: const [
-                          BoxShadow(
-                              color: AppColors.shadowColor,
-                              blurRadius: 10,
-                              spreadRadius: 3)
-                        ],
-                        borderRadius:
-                            BorderRadius.circular(15.r)),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SizedBox(height: 8.h,),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 24.w,//AppDimensions.horizontalPadding,
+                            vertical: 24.h//AppDimensions.verticalPadding
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: const [
+                              BoxShadow(
+                                  color: AppColors.shadowColor,
+                                  blurRadius: 10,
+                                  spreadRadius: 3)
+                            ],
+                            borderRadius:
+                                BorderRadius.circular(15.r)),
+                        child: Column(
                           children: [
-                            HeaderText(
-                              text: controller.isUpdateForm.value
-                                  ? "Update Student info"
-                                  : "Add New Student",
-                              color: AppColors.secondaryLightColor,
-                              size: 16,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                HeaderText(
+                                  text: controller.isUpdateForm.value
+                                      ? "Update Student info"
+                                      : "Add New Student",
+                                  color: AppColors.secondaryLightColor,
+                                  size: 16,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Get.back();
+                                  },
+                                  child: const Icon(
+                                    Icons.cancel,
+                                    color: AppColors.primaryColor,
+                                    size: 36,
+                                  ),
+                                )
+                              ],
                             ),
-                            InkWell(
-                              onTap: () {
-                                Get.back();
-                              },
-                              child: const Icon(
-                                Icons.cancel,
-                                color: AppColors.primaryColor,
-                                size: 36,
-                              ),
-                            )
+                            SizedBox(
+                              height: 32.h//AppDimensions.sectionPaddingVer,
+                            ),
+                            addStudentForm()
                           ],
                         ),
-                        SizedBox(
-                          height: 32.h//AppDimensions.sectionPaddingVer,
-                        ),
-                        addStudentForm()
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -141,8 +142,6 @@ class AddStudentPageView extends GetView<AddStudentPageController> {
               controller.countryCodeController.text=value.iso31662??"";
             },
             controller: controller.phoneController,
-            countryController: controller.countryCodeController,
-            phoneSuggestionController: SuggestionsBoxController(),
           ),
 
           //phoneTextField(),
@@ -171,16 +170,16 @@ class AddStudentPageView extends GetView<AddStudentPageController> {
             height:8.h// AppDimensions.contentPaddingVer,
           ),
           CustomDropDownField(
-            labelText: "Select Gender *",
+            labelText: "Select Gender",
             showBorder: true,
             itemList: controller.genderList,
             onChange: (value) {
               controller.selectedGender.value = value ?? "";
             },
-            validator: (value) {
+            /*validator: (value) {
               return value == null ? "Please select gender" : null;
-            },
-            value: controller.selectedGender.value,
+            },*/
+            value: controller.selectedGender.value.isEmpty?null:controller.selectedGender.value,
           ),
        /*   SizedBox(
             height: 8.h//AppDimensions.contentPaddingVer,

@@ -12,8 +12,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool? minimal;
   final VoidCallback? openDrawer;
   final GlobalKey<ScaffoldState>? scaffoldKey;
+  final bool showBackButton;
 
-  CustomAppBar({this.scaffoldKey, this.openDrawer, this.minimal, super.key});
+  CustomAppBar({
+    this.scaffoldKey,
+    this.openDrawer,
+    this.minimal,
+    this.showBackButton = false, // Default to showing the back button
+    super.key,
+  });
 
   final appBarController = Get.put(AppBarController());
 
@@ -31,10 +38,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               height: 70.h,
               child: Row(
                 children: [
+                  if (showBackButton &&
+                      Navigator.canPop(
+                          context)) // Show back button if there's a previous route
+                    Padding(
+                      padding: EdgeInsets.only(left: 16.w),
+                      child: const BackButton(
+                        color: AppColors.iconColor,
+                      ),
+                    ),
                   Container(
-                    padding:
-                        EdgeInsets.only(left: 24.w//AppDimensions.horizontalPadding
-                        ),
+                    padding: EdgeInsets.only(left: showBackButton ? 0 : 24.w),
                     decoration: BoxDecoration(
                       border: minimal ?? true
                           ? const Border()
@@ -66,10 +80,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               boxShadow: const [
                                 BoxShadow(
                                   color: AppColors.shadowColor,
-                                  spreadRadius: 1
+                                  spreadRadius: 1,
                                 )
                               ],
-                              borderRadius: BorderRadius.circular(10.r)
+                              borderRadius: BorderRadius.circular(10.r),
                             ),
                             child: Material(
                               color: Colors.transparent,
@@ -84,7 +98,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5.r),
+                                          borderRadius:
+                                              BorderRadius.circular(5.r),
                                           color: AppColors.shadowColor,
                                         ),
                                         child: const Icon(
@@ -92,7 +107,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                           color: AppColors.iconColor,
                                         ),
                                       ),
-                                      const BodyText(text: "Q-form",size: 8,fontWeight: FontWeight.bold,resizeAble: false,)
+                                      const BodyText(
+                                        text: "Q-form",
+                                        size: 8,
+                                        fontWeight: FontWeight.bold,
+                                        resizeAble: false,
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -100,54 +120,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             ),
                           ),
                           SizedBox(
-                            width:8.w //AppDimensions.widgetPaddingHor,
+                            width: 8.w,
                           ),
-                          /*InkWell(
-                            onTap: () {
-                              appBarController.openNotification();
-                            },
-                            child: Stack(
-                              children: [
-                                Image.asset(
-                                  AppImagePath.notificationIcon,
-                                  height: 40,
-                                ),
-                                if ((appBarController.homeData.value.data
-                                            ?.unreadNotificationCount ??
-                                        0) >
-                                    0)
-                                  Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: Container(
-                                      height: 21,
-                                      width: 21,
-                                      decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColors.primaryColor),
-                                      child: Center(
-                                        child: HeaderText(
-                                          text: (appBarController
-                                                          .homeData
-                                                          .value
-                                                          .data
-                                                          ?.unreadNotificationCount ??
-                                                      0) >=
-                                                  10
-                                              ? "9+"
-                                              : "${appBarController.homeData.value.data?.unreadNotificationCount ?? ""}",
-                                          color: Colors.white,
-                                          size: 12,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 16.w//AppDimensions.widgetPaddingHor,
-                          ),*/
                           InkWell(
                             onTap: () {
                               scaffoldKey?.currentState?.openDrawer();
@@ -160,10 +134,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   "",
                             ),
                           ),
-                          SizedBox(width: 24.w,)
+                          SizedBox(
+                            width: 24.w,
+                          )
                         ],
                       ),
-                    )
+                    ),
                 ],
               ),
             ),
