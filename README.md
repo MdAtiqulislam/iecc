@@ -2,6 +2,9 @@
 
 A Flutter app for IECC student referral and admission management — register students, track status and get notifications.
 
+[![Google Play](https://img.shields.io/badge/Google_Play-Download-414141?style=for-the-badge&logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=com.revinr.iecc) [![App Store](https://img.shields.io/badge/App_Store-Download-0D96F2?style=for-the-badge&logo=app-store&logoColor=white)](https://apps.apple.com/app/id6499480422)
+
+
 ## Features
 
 - Student registration and add-student flow
