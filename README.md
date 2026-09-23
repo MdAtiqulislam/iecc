@@ -1,16 +1,40 @@
-# iecc
+# IECC (iecc)
 
-A new Flutter project.
+A Flutter app for IECC student referral and admission management — register students, track status and get notifications.
+
+## Features
+
+- Student registration and add-student flow
+- Student details and pending-status pages
+- OTP verification and login
+- Home dashboard with custom app bar
+- Push notifications page
+- Edit-profile page, splash screen
+
+## Tech Stack
+
+- Flutter (Dart)
+- GetX for state management and routing
+- REST API backend
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Project Structure
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```
+lib/
+├── app/modules/   # Home, registration, students, OTP/login, notifications
+├── services/      # API and platform services
+├── theme/         # App theme
+└── main.dart      # App entry point
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Notes
+
+- App label: "iecc" (Android)
+- No secrets or keystores are committed to this repository.
